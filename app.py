@@ -43,8 +43,16 @@ if st.session_state["file_sent"]:
 
     if st.button("Submit"):
         st.session_state.messages.append({"role" : "user" , "parts" : [{"text" : user_question}]})
-        response = st.session_state.chat.send_message(f"{user_question}")
-        st.session_state.messages.append({"role" : "model" , "parts" : [{"text" : response.text}]})
+
+        stream = st.session_state.chat.send_message_stream(f"{user_question}")
+
+        full_response = ""
+        with st.chat_message("assistant"):
+            placeholder = st.empty()
+            for chunk in stream:
+                full_response += chunk.text
+                placeholder.write(full_response)
+        st.session_state.messages.append({"role" : "model" , "parts" : [{"text" : full_response}]})
         
         st.rerun()
 
