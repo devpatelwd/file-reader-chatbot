@@ -1,7 +1,8 @@
 import streamlit as st
 from google import genai
 from io import StringIO
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 st.title("Simple ai chatbot")
